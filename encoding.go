@@ -5,14 +5,14 @@ import (
 )
 
 type jsonableClassifier struct {
-	Matrix *sparseMatrix `json:"matrix"`
+	Matrix *sparseMatrixInt `json:"matrix"`
 }
 
-func (c *Classifier) MarshalJSON() ([]byte, error) {
+func (c *UnweightedClassifier) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&jsonableClassifier{c.Matrix})
 }
 
-func (c *Classifier) UnmarshalJSON(buf []byte) error {
+func (c *UnweightedClassifier) UnmarshalJSON(buf []byte) error {
 	j := jsonableClassifier{}
 
 	err := json.Unmarshal(buf, &j)
@@ -20,15 +20,15 @@ func (c *Classifier) UnmarshalJSON(buf []byte) error {
 		return nil
 	}
 
-	*c = *NewClassifier()
+	*c = *NewUnweightedClassifier()
 	c.Matrix = j.Matrix
 
 	return nil
 }
 
 // Initialize a new classifier from a JSON byte slice.
-func NewClassifierFromJSON(buf []byte) (*Classifier, error) {
-	classifier := &Classifier{}
+func NewClassifierFromJSON(buf []byte) (*UnweightedClassifier, error) {
+	classifier := &UnweightedClassifier{}
 
 	err := classifier.UnmarshalJSON(buf)
 	if err != nil {
@@ -38,11 +38,11 @@ func NewClassifierFromJSON(buf []byte) (*Classifier, error) {
 	return classifier, nil
 }
 
-func (s *sparseColumn) MarshalJSON() ([]byte, error) {
+func (s *sparseColumnInt) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.Data)
 }
 
-func (s *sparseColumn) UnmarshalJSON(buf []byte) error {
+func (s *sparseColumnInt) UnmarshalJSON(buf []byte) error {
 	var data []int
 
 	err := json.Unmarshal(buf, &data)

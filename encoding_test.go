@@ -6,7 +6,7 @@ import (
 )
 
 func TestClassifierJSON(t *testing.T) {
-	classifier := NewClassifier()
+	classifier := NewUnweightedClassifier()
 	classifier.trainWithTestData()
 
 	b, err := classifier.MarshalJSON()

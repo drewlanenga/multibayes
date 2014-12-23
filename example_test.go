@@ -23,7 +23,7 @@ func Example() {
 		},
 	}
 
-	classifier := NewClassifier()
+	classifier := NewUnweightedClassifier()
 
 	// train the classifier
 	for _, document := range documents {

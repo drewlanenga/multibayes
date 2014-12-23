@@ -25,7 +25,7 @@ func getTestData() []document {
 	return documents
 }
 
-func (c *Classifier) trainWithTestData() {
+func (c *UnweightedClassifier) trainWithTestData() {
 	testdata := getTestData()
 	for _, document := range testdata {
 		c.Add(document.Text, document.Classes)

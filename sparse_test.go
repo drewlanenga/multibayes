@@ -13,7 +13,7 @@ func TestSparseMatrix(t *testing.T) {
 	})
 	assert.Equalf(t, err, nil, "Error creating new tokenizer")
 
-	sparse := newSparseMatrix()
+	sparse := newSparseMatrixInt()
 
 	for _, document := range testdata {
 		ngrams := tokenizer.Parse(document.Text)

@@ -4,7 +4,6 @@ type sparseColumn interface {
 	Add(int)
 	Count() int
 	Expand(int) []float64
-	getData()
 }
 
 type sparseColumnInt struct {
@@ -39,8 +38,8 @@ func (s *sparseColumnInt) Expand(n int) []float64 {
 	return expanded
 }
 
-func (s *sparseColumnInt) getData() []int {
-	return s.Data
+func (s *sparseColumnInt) getData() ([]int, int) {
+	return s.Data, len(s.Data)
 }
 
 func newSparseColumnMap() *sparseColumnMap {
@@ -56,7 +55,7 @@ func (s *sparseColumnMap) Add(index int) {
 func (s *sparseColumnMap) Count() int {
 	count := 0
 	for _, val := range s.Data {
-		count := count + val
+		count = count + val
 	}
 	return count
 }
@@ -69,8 +68,13 @@ func (s *sparseColumnMap) Expand(n int) []float64 {
 	return expanded
 }
 
-func (s *sparseColumnMap) getData() map[int]int {
-	return s.Data
+func (s *sparseColumnMap) getData() (map[int]int, int) {
+	// length != len(s.Data)
+	length := 0
+	for _, count := range s.Data {
+		length += count
+	}
+	return s.Data, length
 }
 
 type sparseMatrix interface {
@@ -86,8 +90,8 @@ type sparseMatrixMap struct {
 	N       int                         `json:"n"`       // number of rows currently in the matrix
 }
 
-func newSparseMatrixMap() sparseMatrix {
-	return sparseMatrixMap{
+func newSparseMatrixMap() *sparseMatrixMap {
+	return &sparseMatrixMap{
 		Tokens:  make(map[string]*sparseColumnMap),
 		Classes: make(map[string]*sparseColumnInt),
 		N:       0,
@@ -124,11 +128,11 @@ func (s *sparseMatrixMap) getTokens() map[string]*sparseColumnMap {
 	return s.Tokens
 }
 
-func (s *sparseMatrixMap) getClasses() map[string]*sparseColumnMap {
+func (s *sparseMatrixMap) getClasses() map[string]*sparseColumnInt {
 	return s.Classes
 }
 
-func (s *sparseColumnMap) getN() int {
+func (s *sparseMatrixMap) getN() int {
 	return s.N
 }
 
@@ -138,8 +142,8 @@ type sparseMatrixInt struct {
 	N       int                         `json:"n"`       // number of rows currently in the matrix
 }
 
-func newSparseMatrixInt() sparseMatrix {
-	return sparseMatrixInt{
+func newSparseMatrixInt() *sparseMatrixInt {
+	return &sparseMatrixInt{
 		Tokens:  make(map[string]*sparseColumnInt),
 		Classes: make(map[string]*sparseColumnInt),
 		N:       0,
@@ -180,6 +184,6 @@ func (s *sparseMatrixInt) getClasses() map[string]*sparseColumnInt {
 	return s.Classes
 }
 
-func (s *sparseColumnInt) getN() int {
+func (s *sparseMatrixInt) getN() int {
 	return s.N
 }

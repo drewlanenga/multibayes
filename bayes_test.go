@@ -8,7 +8,7 @@ import (
 func TestPosterior(t *testing.T) {
 	minClassSize = 0
 
-	classifier := NewClassifier()
+	classifier := NewUnweightedClassifier()
 	classifier.trainWithTestData()
 
 	probs := classifier.Posterior("Aaron's dog has tons of fleas")
