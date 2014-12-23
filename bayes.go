@@ -2,7 +2,7 @@ package multibayes
 
 import (
 	//"bytes"
-	"fmt"
+	//"fmt"
 	"math"
 	//"reflect"
 )
@@ -87,10 +87,10 @@ func (c *WeightedClassifier) Posterior(document string) map[string]float64 {
 	predictions := make(map[string]float64)
 
 	for class, classcolumn := range c.Matrix.getClasses() {
-		fmt.Printf("Class: %v\t Column: %v\n", class, classcolumn)
+		//fmt.Printf("Class: %v\t Column: %v\n", class, classcolumn)
 		classdata, classlength := classcolumn.getData()
 		if classlength < minClassSize {
-			fmt.Printf("Class length: %v\n", classlength)
+			//fmt.Printf("Class length: %v\n", classlength)
 			continue
 		}
 
@@ -107,20 +107,20 @@ func (c *WeightedClassifier) Posterior(document string) map[string]float64 {
 		// check if each token is in our token sparse matrix
 		for _, token := range tokens {
 			if tokencolumn, ok := c.Matrix.getTokens()[token.String()]; ok {
-				fmt.Printf("Token: %v\n", token.String())
+				//fmt.Printf("Token: %v\n", token.String())
 				//fmt.Printf("Token column: %+v\n", tokencolumn)
 				tokendata, tokenlength := tokencolumn.getData()
 				// conditional probability the token occurs for the class
 				joint := mapIntersection(tokendata, classdata)
-				fmt.Printf("Tokendata: %v\t TokendataType: %T\t Classdata: %v\t ClassdataType: %T\t Intersection: %v\n", tokendata, tokendata, classdata, classdata, joint)
+				//fmt.Printf("Tokendata: %v\t TokendataType: %T\t Classdata: %v\t ClassdataType: %T\t Intersection: %v\n", tokendata, tokendata, classdata, classdata, joint)
 				conditional := float64(joint+smoother) / float64(smoothN) // P(F|C=Y)
-				fmt.Printf("Conditional: %v\n", conditional)
+				//fmt.Printf("Conditional: %v\n", conditional)
 				loglikelihood[0] += math.Log(conditional)
 
 				// conditional probability the token occurs if the class doesn't apply
 				not := tokenlength - joint
 				notconditional := float64(not+smoother) / float64(smoothN) // P(F|C=N)
-				fmt.Printf("NotConditional: %v\n", notconditional)
+				//fmt.Printf("NotConditional: %v\n", notconditional)
 				loglikelihood[1] += math.Log(notconditional)
 			}
 		}
@@ -130,10 +130,10 @@ func (c *WeightedClassifier) Posterior(document string) map[string]float64 {
 			math.Exp(loglikelihood[1]),
 		}
 
-		fmt.Printf("Priors: %v\t Likelihood: %v\n", priors, likelihood)
+		//fmt.Printf("Priors: %v\t Likelihood: %v\n", priors, likelihood)
 		prob := bayesRule(priors, likelihood) // P(C|F)
 		predictions[class] = prob[0]
-		fmt.Println("----")
+		//fmt.Println("----")
 	}
 
 	return predictions
@@ -144,10 +144,10 @@ func (c *UnweightedClassifier) Posterior(document string) map[string]float64 {
 	predictions := make(map[string]float64)
 
 	for class, classcolumn := range c.Matrix.getClasses() {
-		fmt.Printf("Class: %v\t Column: %v\n", class, classcolumn)
+		//fmt.Printf("Class: %v\t Column: %v\n", class, classcolumn)
 		classdata, classlength := classcolumn.getData()
 		if classlength < minClassSize {
-			fmt.Printf("Class length: %v\n", classlength)
+			//fmt.Printf("Class length: %v\n", classlength)
 			continue
 		}
 
@@ -164,11 +164,11 @@ func (c *UnweightedClassifier) Posterior(document string) map[string]float64 {
 		// check if each token is in our token sparse matrix
 		for _, token := range tokens {
 			if tokencolumn, ok := c.Matrix.getTokens()[token.String()]; ok {
-				fmt.Printf("Token: %v\n", token.String())
+				//fmt.Printf("Token: %v\n", token.String())
 				tokendata, tokenlength := tokencolumn.getData()
 				// conditional probability the token occurs for the class
 				joint := arrayIntersection(tokendata, classdata)
-				fmt.Printf("Tokendata: %v\t TokendataType: %T\t Classdata: %v\t ClassdataType: %T\t Intersection: %v\n", tokendata, tokendata, classdata, classdata, joint)
+				//fmt.Printf("Tokendata: %v\t TokendataType: %T\t Classdata: %v\t ClassdataType: %T\t Intersection: %v\n", tokendata, tokendata, classdata, classdata, joint)
 				conditional := float64(joint+smoother) / float64(smoothN) // P(F|C=Y)
 				loglikelihood[0] += math.Log(conditional)
 
@@ -186,7 +186,7 @@ func (c *UnweightedClassifier) Posterior(document string) map[string]float64 {
 
 		prob := bayesRule(priors, likelihood) // P(C|F)
 		predictions[class] = prob[0]
-		fmt.Println("----")
+		//fmt.Println("----")
 	}
 
 	return predictions
