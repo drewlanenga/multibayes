@@ -31,3 +31,10 @@ func (c *UnweightedClassifier) trainWithTestData() {
 		c.Add(document.Text, document.Classes)
 	}
 }
+
+func (c *WeightedClassifier) trainwithTestData() {
+	testdata := getTestData()
+	for _, document := range testdata {
+		c.Add(document.Text, document.Classes)
+	}
+}
