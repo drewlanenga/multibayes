@@ -38,24 +38,8 @@ documents := []struct {
 		Classes: []string{"vet"},
 	},
 	{
-		Text:    "My cat has fleas.",
-		Classes: []string{"vet"},
-	},
-	{
-		Text:    "My dog has ebola.",
-		Classes: []string{"vet", "cdc"},
-	},
-	{
 		Text:    "My cat has ebola.",
 		Classes: []string{"vet", "cdc"},
-	},
-	{
-		Text:    "Drew has ebola.",
-		Classes: []string{"cdc"},
-	},
-	{
-		Text:    "Drew's cat has ebola",
-		Classes: []string{"cdc", "vet"},
 	},
 	{
 		Text:    "Aaron has ebola.",
@@ -64,6 +48,7 @@ documents := []struct {
 }
 
 classifier := NewClassifier()
+classifier.MinClassSize = 0
 
 // train the classifier
 for _, document := range documents {
@@ -74,5 +59,5 @@ for _, document := range documents {
 probs := classifier.Posterior("Aaron's dog has fleas.")
 fmt.Printf("Posterior Probabilities: %+v\n", probs)
 
-// Posterior Probabilities: map[vet:0.9473684210526315 cdc:0.39999999999999997]
+// Posterior Probabilities: map[vet: 0.8571, cdc: 0.2727]
 ```
