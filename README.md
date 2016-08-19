@@ -59,5 +59,5 @@ for _, document := range documents {
 probs := classifier.Posterior("Aaron's dog has fleas.")
 fmt.Printf("Posterior Probabilities: %+v\n", probs)
 
-// Posterior Probabilities: map[vet: 0.8571, cdc: 0.2727]
+// Posterior Probabilities: map[vet:0.8571 cdc:0.2727]
 ```
