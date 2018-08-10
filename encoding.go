@@ -6,11 +6,12 @@ import (
 )
 
 type jsonableClassifier struct {
-	Matrix *sparseMatrix `json:"matrix"`
+	Matrix       *sparseMatrix `json:"matrix"`
+	MinClassSize int           `json:"minClassSize"`
 }
 
 func (c *Classifier) MarshalJSON() ([]byte, error) {
-	return json.Marshal(&jsonableClassifier{c.Matrix})
+	return json.Marshal(&jsonableClassifier{c.Matrix, c.MinClassSize})
 }
 
 func (c *Classifier) UnmarshalJSON(buf []byte) error {
@@ -23,6 +24,7 @@ func (c *Classifier) UnmarshalJSON(buf []byte) error {
 
 	*c = *NewClassifier()
 	c.Matrix = j.Matrix
+	c.MinClassSize = j.MinClassSize
 
 	return nil
 }

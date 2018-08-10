@@ -5,14 +5,14 @@ import (
 )
 
 var (
-	smoother     = 1 // laplace
+	smoother            = 1 // laplace
 	defaultMinClassSize = 5
 )
 
 type Classifier struct {
-	Tokenizer *tokenizer    `json:"-"`
-	Matrix    *sparseMatrix `json:"matrix"`
-	MinClassSize int
+	Tokenizer    *tokenizer    `json:"-"`
+	Matrix       *sparseMatrix `json:"matrix"`
+	MinClassSize int           `json:"minClassSize"`
 }
 
 // Create a new multibayes classifier.
@@ -24,8 +24,8 @@ func NewClassifier() *Classifier {
 	sparse := newSparseMatrix()
 
 	return &Classifier{
-		Tokenizer: tokenize,
-		Matrix:    sparse,
+		Tokenizer:    tokenize,
+		Matrix:       sparse,
 		MinClassSize: defaultMinClassSize,
 	}
 }
